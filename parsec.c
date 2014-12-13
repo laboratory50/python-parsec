@@ -17,7 +17,29 @@
  **/
 
 #include <Python.h>
+#include <parsec/parsec_mac.h>
 #include <parsec/mac.h>
+
+#if PY_MAJOR_VERSION < 3
+    #define PyLong_FromLong PyInt_FromLong
+#endif
+
+PyObject* raise_exception(void);
+
+/** Конвертор PyObject -> mac_t для функций PyArg_ParseTuple*. */
+static int get_mac(PyObject *pyobj, mac_t* mac)
+{
+  if (!PyCapsule_IsValid(pyobj, "parsec_h"))
+    {
+      PyErr_SetString(PyExc_TypeError, "Expected a PARSEC mac_t object");
+      return 0;
+    }
+  else
+    {
+      *mac = PyCapsule_GetPointer(pyobj, "parsec_h");
+      return 1;
+    }
+}
 
 /** Деструктор для капсулы */
 static void free_pymac(PyObject *pyobj)
@@ -58,21 +80,6 @@ PyObject* raise_exception(void)
     }
 
   return PyErr_SetFromErrno(exc);
-}
-
-/** Конвертор PyObject -> mac_t для функций PyArg_ParseTuple*. */
-static int get_mac(PyObject *pyobj, mac_t* mac)
-{
-  if (!PyCapsule_IsValid(pyobj, "parsec_h"))
-    {
-      PyErr_SetString(PyExc_TypeError, "Expected a PARSEC mac_t object");
-      return 0;
-    }
-  else
-    {
-      *mac = PyCapsule_GetPointer(pyobj, "parsec_h");
-      return 1;
-    }
 }
 
 static PyObject* py_mac_to_text(PyObject *self, PyObject *args, PyObject *kw)
@@ -154,14 +161,15 @@ static PyObject* py_mac_set_pid(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+#include <parsec/mac.h>
 static PyMethodDef methods[] = {
-  {"mac_to_text",  py_mac_to_text, METH_VARARGS | METH_KEYWORDS,
+  {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS | METH_KEYWORDS,
    "Преобразование объекта-метки в текстовый формат."},
-  {"mac_from_text",  py_mac_from_text, METH_VARARGS | METH_KEYWORDS,
+  {"mac_from_text", (PyCFunction) py_mac_from_text, METH_VARARGS | METH_KEYWORDS,
    "Преобразование текста в мандатную метку."},
-  {"mac_get_pid",  py_mac_get_pid, METH_VARARGS,
+  {"mac_get_pid",   (PyCFunction) py_mac_get_pid, METH_VARARGS,
    "Считывание мандатного контекста безопасности процесса."},
-  {"mac_set_pid",  py_mac_set_pid, METH_VARARGS,
+  {"mac_set_pid",   (PyCFunction) py_mac_set_pid, METH_VARARGS,
    "Установка мандатного контекста безопасности процесса."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
@@ -192,17 +200,17 @@ static PyObject* moduleinit(void)
 
   d = PyModule_GetDict(m);
 
-  PyDict_SetItemString(d, "FMT_NUM", PyInt_FromLong(MAC_FMT_NUM));
-  PyDict_SetItemString(d, "FMT_TXT", PyInt_FromLong(MAC_FMT_TXT));
-  PyDict_SetItemString(d, "FMT_LEV", PyInt_FromLong(MAC_FMT_LEV));
-  PyDict_SetItemString(d, "FMT_CAT", PyInt_FromLong(MAC_FMT_CAT));
-  PyDict_SetItemString(d, "FMT_TYPE", PyInt_FromLong(MAC_FMT_TYPE));
+  PyDict_SetItemString(d, "FMT_NUM", PyLong_FromLong(MAC_FMT_NUM));
+  PyDict_SetItemString(d, "FMT_TXT", PyLong_FromLong(MAC_FMT_TXT));
+  PyDict_SetItemString(d, "FMT_LEV", PyLong_FromLong(MAC_FMT_LEV));
+  PyDict_SetItemString(d, "FMT_CAT", PyLong_FromLong(MAC_FMT_CAT));
+  PyDict_SetItemString(d, "FMT_TYPE", PyLong_FromLong(MAC_FMT_TYPE));
 
-  PyDict_SetItemString(d, "MAC_TYPE_SUBJECT", PyInt_FromLong(MAC_TYPE_SUBJECT));
-  PyDict_SetItemString(d, "MAC_TYPE_OBJECT", PyInt_FromLong(MAC_TYPE_OBJECT));
-  PyDict_SetItemString(d, "MAC_TYPE_EQU", PyInt_FromLong(MAC_TYPE_EQU));
-  PyDict_SetItemString(d, "MAC_TYPE_LOW", PyInt_FromLong(MAC_TYPE_LOW));
-  PyDict_SetItemString(d, "MAC_TYPE_EQU_W", PyInt_FromLong(MAC_TYPE_EQU_W));
+  PyDict_SetItemString(d, "MAC_TYPE_SUBJECT", PyLong_FromLong(MAC_TYPE_SUBJECT));
+  PyDict_SetItemString(d, "MAC_TYPE_OBJECT", PyLong_FromLong(MAC_TYPE_OBJECT));
+  PyDict_SetItemString(d, "MAC_TYPE_EQU", PyLong_FromLong(MAC_TYPE_EQU));
+  PyDict_SetItemString(d, "MAC_TYPE_LOW", PyLong_FromLong(MAC_TYPE_LOW));
+  PyDict_SetItemString(d, "MAC_TYPE_EQU_W", PyLong_FromLong(MAC_TYPE_EQU_W));
 
   return m; /* m might be NULL if module init failed */
 }
