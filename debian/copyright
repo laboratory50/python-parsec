@@ -1,0 +1,27 @@
+This package was debianized by Vasiliy Shlykov.
+
+It was downloaded from http://github.com/laboratory50/python-parsec
+
+Upstream Authors:
+
+    Vasiliy Shlykov <vash@vasiliyshlykov.org>
+    Лаборатория 50 http://lab50.net
+
+Copyright:
+
+    © Лаборатория 50, 2014
+
+License:
+
+    The library is distributed under the LGPLv3+.
+
+The Debian packaging is:
+
+    © Vasiliy Shlykov <vash@vasiliyshlykov.org>
+
+and is licensed under the GPL version 3.
+
+On Debian systems, the complete text of the GNU Lesser General Public
+License version 3 can be found
+in "/usr/share/common-licenses/GPL-3".
+
