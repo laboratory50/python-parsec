@@ -158,6 +158,7 @@ static PyObject* py_mac_set_pid(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+<<<<<<< HEAD
 static PyObject* py_mac_cmp(PyObject *self, PyObject *args)
 {
   mac_t src = NULL,
