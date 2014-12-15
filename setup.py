@@ -21,7 +21,7 @@ from distutils.core import setup, Extension
 
 setup (
     name = "parsec",
-    version = "0.1",
+    version = "0.2",
     description = "python binding to PARSEC API",
     long_description = """
 Эта библиотека для языка Питон содержит функции работы с API PARSEC.

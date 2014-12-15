@@ -172,6 +172,21 @@ static PyObject* py_mac_cmp(PyObject *self, PyObject *args)
   return Py_BuildValue("i", ret);
 }
 
+static PyObject* py_mac_get_fd(PyObject *self, PyObject *args)
+{
+  mac_t mac;
+  int fd = 0;
+
+  if (!PyArg_ParseTuple(args, "i:mac_get_fd", &fd))
+      return NULL;
+
+  mac = mac_get_fd(fd);
+  if (!mac)
+      return raise_exception();
+
+  return mac_to_py(mac);
+}
+
 #include <parsec/mac.h>
 static PyMethodDef methods[] = {
   {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
@@ -184,6 +199,8 @@ static PyMethodDef methods[] = {
    "Установка мандатного контекста безопасности процесса."},
   {"mac_cmp",       (PyCFunction) py_mac_cmp, METH_VARARGS,
    "Сравнение мандатных меток."},
+  {"mac_get_fd",    (PyCFunction) py_mac_get_fd, METH_VARARGS,
+   "Считывание мандатной метки файлового объекта (или сокета)."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 

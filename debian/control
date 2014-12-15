@@ -2,7 +2,8 @@ Source: parsec
 Maintainer: Лаборатория 50 <team@lab50.net>
 Section: python
 Priority: optional
-Build-Depends: python3-all-dev, python3-all-dbg,
+Build-Depends: dh-python,
+    python3-all-dev, python3-all-dbg,
     python-all-dev, python-all-dbg,
     debhelper (>= 9), libparsec-mac2-dev
 Homepage: http://lab50.net

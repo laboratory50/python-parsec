@@ -1,3 +1,9 @@
+parsec (0.2) testing; urgency=low
+
+  * Функция mac_get_fd.
+
+ -- Лаборатория 50 <team@lab50.net>  Mon, 15 Dec 2014 13:39:58 +0400
+
 parsec (0.1) unstable; urgency=low
 
   * source package automatically created by stdeb 0.8.2
