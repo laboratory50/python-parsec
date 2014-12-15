@@ -1,4 +1,4 @@
-/**
+    /**
  * © Лаборатория 50, 2014
  * Автор: Шлыков Василий vash@vasiliyshlykov.org
  *
@@ -149,7 +149,7 @@ static PyObject* py_mac_set_pid(PyObject *self, PyObject *args)
   mac_t mac = NULL;
   pid_t pid = 0;
 
-  if (!PyArg_ParseTuple(args, "iO&:mac_set_pid", pid, get_mac, &mac))
+  if (!PyArg_ParseTuple(args, "iO&:mac_set_pid", &pid, get_mac, &mac))
       return NULL;
 
   if (mac_set_pid(pid, mac) == -1)
@@ -158,7 +158,6 @@ static PyObject* py_mac_set_pid(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
-<<<<<<< HEAD
 static PyObject* py_mac_cmp(PyObject *self, PyObject *args)
 {
   mac_t src = NULL,
