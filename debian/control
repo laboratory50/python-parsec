@@ -2,7 +2,9 @@ Source: parsec
 Maintainer: Лаборатория 50 <team@lab50.net>
 Section: python
 Priority: optional
-Build-Depends: python3-all-dev, python-all-dev, debhelper (>= 9), libparsec-mac2-dev
+Build-Depends: python3-all-dev, python3-all-dbg,
+    python-all-dev, python-all-dbg,
+    debhelper (>= 9), libparsec-mac2-dev
 Homepage: http://lab50.net
 Standards-Version: 3.9.1
 X-Python-Version: >= 2.7
@@ -20,6 +22,24 @@ Description: python binding to PARSEC API
  Пакет содержит набор Питоновских биндингов для API PARSEC.
  .
 
+Package: python-parsec-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends},
+    python-parsec (= ${binary:Version})
+Recommends:
+    python-dbg
+Description: python binding to PARSEC API
+ .
+ Эта библиотека для языка Питон содержит функции работы с API PARSEC.
+ PARSEC входит в систему защиты ОС СН Astra Linux Special Edition. В основном
+ это функции мандатной защиты объектов операционной системы: процессов, файлов,
+ сокетов и т.д.
+ .
+ Пакет содержит отладочную инфорацию набора Питоновских биндингов для API PARSEC.
+ .
+
 Package: python3-parsec
 Architecture: any
 Depends: ${misc:Depends}, ${python3:Depends}, ${shlibs:Depends}
@@ -31,5 +51,23 @@ Description: python binding to PARSEC API
  сокетов и т.д.
  .
  Пакет содержит набор Питоновских биндингов для API PARSEC.
+ .
+
+Package: python3-parsec-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${misc:Depends}, ${python3:Depends}, ${shlibs:Depends},
+    python3-parsec (= ${binary:Version})
+Recommends:
+    python3-dbg
+Description: python binding to PARSEC API
+ .
+ Эта библиотека для языка Питон содержит функции работы с API PARSEC.
+ PARSEC входит в систему защиты ОС СН Astra Linux Special Edition. В основном
+ это функции мандатной защиты объектов операционной системы: процессов, файлов,
+ сокетов и т.д.
+ .
+ Пакет содержит отладочную инфорацию набора Питоновских биндингов для API PARSEC.
  .
 
