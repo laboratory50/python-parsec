@@ -82,15 +82,14 @@ PyObject* raise_exception(void)
   return PyErr_SetFromErrno(exc);
 }
 
-static PyObject* py_mac_to_text(PyObject *self, PyObject *args, PyObject *kw)
+static PyObject* py_mac_to_text(PyObject *self, PyObject *args)
 {
   mac_t mac = NULL;
   int flags = 0;
   char *str;
   PyObject *ret;
-  static char *kwlist[] = { "fmt_flags", NULL };
 
-  if (!PyArg_ParseTupleAndKeywords(args, kw, "O&|i:mac_to_text", kwlist,
+  if (!PyArg_ParseTuple(args, "O&|i:mac_to_text",
             get_mac, &mac, &flags))
       return NULL;
 
@@ -105,15 +104,13 @@ static PyObject* py_mac_to_text(PyObject *self, PyObject *args, PyObject *kw)
   return ret;
 }
 
-static PyObject* py_mac_from_text(PyObject *self, PyObject *args, PyObject *kw)
+static PyObject* py_mac_from_text(PyObject *self, PyObject *args)
 {
   mac_t mac = NULL;
   const char *str = NULL;
   mac_type_t type = MAC_TYPE_OBJECT;
-  static char *kwlist[] = { "mac_type", NULL };
 
-  if (!PyArg_ParseTupleAndKeywords(args, kw, "s|i:mac_from_text", kwlist,
-            &str, &type))
+  if (!PyArg_ParseTuple(args, "s|i:mac_from_text", &str, &type))
       return NULL;
 
   if (!str)
@@ -161,16 +158,32 @@ static PyObject* py_mac_set_pid(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+static PyObject* py_mac_cmp(PyObject *self, PyObject *args)
+{
+  mac_t src = NULL,
+        dst = NULL;
+  int ret;
+
+  if (!PyArg_ParseTuple(args, "O&O&:mac_cmp", get_mac, &src, get_mac, &dst))
+      return NULL;
+
+  ret = mac_cmp(src, dst);
+
+  return Py_BuildValue("i", ret);
+}
+
 #include <parsec/mac.h>
 static PyMethodDef methods[] = {
-  {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS | METH_KEYWORDS,
+  {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
    "Преобразование объекта-метки в текстовый формат."},
-  {"mac_from_text", (PyCFunction) py_mac_from_text, METH_VARARGS | METH_KEYWORDS,
+  {"mac_from_text", (PyCFunction) py_mac_from_text, METH_VARARGS,
    "Преобразование текста в мандатную метку."},
   {"mac_get_pid",   (PyCFunction) py_mac_get_pid, METH_VARARGS,
    "Считывание мандатного контекста безопасности процесса."},
   {"mac_set_pid",   (PyCFunction) py_mac_set_pid, METH_VARARGS,
    "Установка мандатного контекста безопасности процесса."},
+  {"mac_cmp",       (PyCFunction) py_mac_cmp, METH_VARARGS,
+   "Сравнение мандатных меток."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
