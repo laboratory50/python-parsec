@@ -3,9 +3,10 @@ Maintainer: Лаборатория 50 <team@lab50.net>
 Section: python
 Priority: optional
 Build-Depends: dh-python,
+    debhelper (>= 9),
     python3-all-dev, python3-all-dbg,
     python-all-dev, python-all-dbg,
-    debhelper (>= 9), libparsec-mac2-dev
+    libparsec-mac2-dev
 Homepage: http://lab50.net
 Standards-Version: 3.9.1
 X-Python-Version: >= 2.7

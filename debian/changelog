@@ -1,3 +1,9 @@
+parsec (0.3) testing; urgency=low
+
+  * Функция drop_caps.
+
+ -- Лаборатория 50 <team@lab50.net>  Tue, 16 Dec 2014 09:11:23 +0400
+
 parsec (0.2) testing; urgency=low
 
   * Функция mac_get_fd.

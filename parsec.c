@@ -1,4 +1,4 @@
-    /**
+/**
  * © Лаборатория 50, 2014
  * Автор: Шлыков Василий vash@vasiliyshlykov.org
  *
@@ -19,6 +19,7 @@
 #include <Python.h>
 #include <parsec/parsec_mac.h>
 #include <parsec/mac.h>
+#include <parsec/parsec_integration.h>
 
 #if PY_MAJOR_VERSION < 3
     #define PyLong_FromLong PyInt_FromLong
@@ -187,6 +188,14 @@ static PyObject* py_mac_get_fd(PyObject *self, PyObject *args)
   return mac_to_py(mac);
 }
 
+static PyObject* py_drop_caps(PyObject *self)
+{
+  if (parsec_cur_caps_set(0, 0) != 0)
+      return raise_exception();
+
+  Py_RETURN_NONE;
+}
+
 #include <parsec/mac.h>
 static PyMethodDef methods[] = {
   {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
@@ -201,6 +210,8 @@ static PyMethodDef methods[] = {
    "Сравнение мандатных меток."},
   {"mac_get_fd",    (PyCFunction) py_mac_get_fd, METH_VARARGS,
    "Считывание мандатной метки файлового объекта (или сокета)."},
+  {"drop_caps",     (PyCFunction) py_drop_caps, METH_NOARGS,
+   "Сброс всех привилегий Linux и PARSEC у текущего процесс."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
