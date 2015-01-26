@@ -1,3 +1,9 @@
+parsec (0.3.1) testing; urgency=medium
+
+  * Функции capget, capset.
+
+ -- Лаборатория 50 <team@lab50.net>  Mon, 26 Jan 2015 17:54:45 +0300
+
 parsec (0.3) testing; urgency=low
 
   * Функция drop_caps.
