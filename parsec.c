@@ -225,7 +225,7 @@ static PyObject* py_capset(PyObject *self, PyObject *args)
   pid_t pid = 0;
   parsec_caps_t caps;
 
-  if (!PyArg_ParseTuple(args, "i(iii):capget", &pid, &caps.cap_effective,
+  if (!PyArg_ParseTuple(args, "i(iii):capset", &pid, &caps.cap_effective,
                         &caps.cap_permitted, &caps.cap_inheritable))
       return NULL;
 
