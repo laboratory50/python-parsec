@@ -298,17 +298,17 @@ static PyObject* moduleinit(void)
   PyDict_SetItemString(d, "MAC_TYPE_LOW", PyLong_FromLong(MAC_TYPE_LOW));
   PyDict_SetItemString(d, "MAC_TYPE_EQU_W", PyLong_FromLong(MAC_TYPE_EQU_W));
 
-  PyDict_SetItemString(d, "PCAP_FILE_CAP",   PyLong_FromLong(PARSEC_CAP_FILE_CAP));
-  PyDict_SetItemString(d, "PCAP_AUDIT",      PyLong_FromLong(PARSEC_CAP_AUDIT));
-  PyDict_SetItemString(d, "PCAP_SETMAC",     PyLong_FromLong(PARSEC_CAP_SETMAC));
-  PyDict_SetItemString(d, "PCAP_CHMAC",      PyLong_FromLong(PARSEC_CAP_CHMAC));
-  PyDict_SetItemString(d, "PCAP_IGNMACLVL",  PyLong_FromLong(PARSEC_CAP_IGNMACLVL));
-  PyDict_SetItemString(d, "PCAP_IGNMACCAT",  PyLong_FromLong(PARSEC_CAP_IGNMACCAT));
-  PyDict_SetItemString(d, "PCAP_SIG",        PyLong_FromLong(PARSEC_CAP_SIG));
-  PyDict_SetItemString(d, "PCAP_PRIV_SOCK",  PyLong_FromLong(PARSEC_CAP_PRIV_SOCK));
-  PyDict_SetItemString(d, "PCAP_READSEARCH", PyLong_FromLong(PARSEC_CAP_READSEARCH));
-  PyDict_SetItemString(d, "PCAP_CAP",        PyLong_FromLong(PARSEC_CAP_CAP));
-  PyDict_SetItemString(d, "PCAP_MAC_SOCK",   PyLong_FromLong(PARSEC_CAP_MAC_SOCK));
+  PyDict_SetItemString(d, "PCAP_FILE_CAP",   PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_FILE_CAP)));
+  PyDict_SetItemString(d, "PCAP_AUDIT",      PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_AUDIT)));
+  PyDict_SetItemString(d, "PCAP_SETMAC",     PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_SETMAC)));
+  PyDict_SetItemString(d, "PCAP_CHMAC",      PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_CHMAC)));
+  PyDict_SetItemString(d, "PCAP_IGNMACLVL",  PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_IGNMACLVL)));
+  PyDict_SetItemString(d, "PCAP_IGNMACCAT",  PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_IGNMACCAT)));
+  PyDict_SetItemString(d, "PCAP_SIG",        PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_SIG)));
+  PyDict_SetItemString(d, "PCAP_PRIV_SOCK",  PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_PRIV_SOCK)));
+  PyDict_SetItemString(d, "PCAP_READSEARCH", PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_READSEARCH)));
+  PyDict_SetItemString(d, "PCAP_CAP",        PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_CAP)));
+  PyDict_SetItemString(d, "PCAP_MAC_SOCK",   PyLong_FromLong(PARSEC_CAP_TO_MASK(PARSEC_CAP_MAC_SOCK)));
 
   return m; /* m might be NULL if module init failed */
 }
