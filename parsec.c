@@ -197,6 +197,10 @@ static PyObject* py_drop_caps(PyObject *self)
   Py_RETURN_NONE;
 }
 
+/*
+ * Считывание привилегий процессаю
+ * Возвращает кортеж (effective, permitted, inheritable).
+ */
 static PyObject* py_capget(PyObject *self, PyObject *args)
 {
   pid_t pid = 0;
@@ -212,6 +216,10 @@ static PyObject* py_capget(PyObject *self, PyObject *args)
                        caps.cap_permitted, caps.cap_inheritable);
 }
 
+/*
+ * Установка привилегий на процесс.
+ * Параметры: pid, (effective, permitted, inheritable)
+ */
 static PyObject* py_capset(PyObject *self, PyObject *args)
 {
   pid_t pid = 0;
