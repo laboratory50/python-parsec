@@ -196,7 +196,6 @@ static PyObject* py_drop_caps(PyObject *self)
   Py_RETURN_NONE;
 }
 
-#include <parsec/mac.h>
 static PyMethodDef methods[] = {
   {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
    "Преобразование объекта-метки в текстовый формат."},
