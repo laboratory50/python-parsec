@@ -18,6 +18,7 @@
 
 #include <Python.h>
 #include <parsec/parsec_mac.h>
+#include <parsec/parsec_cap.h>
 #include <parsec/mac.h>
 #include <parsec/parsec_integration.h>
 
@@ -196,6 +197,36 @@ static PyObject* py_drop_caps(PyObject *self)
   Py_RETURN_NONE;
 }
 
+static PyObject* py_capget(PyObject *self, PyObject *args)
+{
+  pid_t pid = 0;
+  parsec_caps_t caps;
+
+  if (!PyArg_ParseTuple(args, "i:capget", &pid))
+      return NULL;
+
+  if (parsec_capget(pid, &caps) == -1)
+      return raise_exception();
+
+  return Py_BuildValue("(iii)", caps.cap_effective,
+                       caps.cap_permitted, caps.cap_inheritable);
+}
+
+static PyObject* py_capset(PyObject *self, PyObject *args)
+{
+  pid_t pid = 0;
+  parsec_caps_t caps;
+
+  if (!PyArg_ParseTuple(args, "i(iii):capget", &pid, &caps.cap_effective,
+                        &caps.cap_permitted, &caps.cap_inheritable))
+      return NULL;
+
+  if (parsec_capset(pid, &caps) == -1)
+      return raise_exception();
+
+  Py_RETURN_NONE;
+}
+
 static PyMethodDef methods[] = {
   {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
    "Преобразование объекта-метки в текстовый формат."},
@@ -211,6 +242,10 @@ static PyMethodDef methods[] = {
    "Считывание мандатной метки файлового объекта (или сокета)."},
   {"drop_caps",     (PyCFunction) py_drop_caps, METH_NOARGS,
    "Сброс всех привилегий Linux и PARSEC у текущего процесс."},
+  {"capget",        (PyCFunction) py_capget, METH_VARARGS,
+   "Считывание привилегий PARSEC процесса."},
+  {"capset",        (PyCFunction) py_capset, METH_VARARGS,
+   "Установка привилегий PARSEC процесса."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -254,6 +289,18 @@ static PyObject* moduleinit(void)
   PyDict_SetItemString(d, "MAC_TYPE_EQU", PyLong_FromLong(MAC_TYPE_EQU));
   PyDict_SetItemString(d, "MAC_TYPE_LOW", PyLong_FromLong(MAC_TYPE_LOW));
   PyDict_SetItemString(d, "MAC_TYPE_EQU_W", PyLong_FromLong(MAC_TYPE_EQU_W));
+
+  PyDict_SetItemString(d, "PCAP_FILE_CAP",   PyLong_FromLong(PARSEC_CAP_FILE_CAP));
+  PyDict_SetItemString(d, "PCAP_AUDIT",      PyLong_FromLong(PARSEC_CAP_AUDIT));
+  PyDict_SetItemString(d, "PCAP_SETMAC",     PyLong_FromLong(PARSEC_CAP_SETMAC));
+  PyDict_SetItemString(d, "PCAP_CHMAC",      PyLong_FromLong(PARSEC_CAP_CHMAC));
+  PyDict_SetItemString(d, "PCAP_IGNMACLVL",  PyLong_FromLong(PARSEC_CAP_IGNMACLVL));
+  PyDict_SetItemString(d, "PCAP_IGNMACCAT",  PyLong_FromLong(PARSEC_CAP_IGNMACCAT));
+  PyDict_SetItemString(d, "PCAP_SIG",        PyLong_FromLong(PARSEC_CAP_SIG));
+  PyDict_SetItemString(d, "PCAP_PRIV_SOCK",  PyLong_FromLong(PARSEC_CAP_PRIV_SOCK));
+  PyDict_SetItemString(d, "PCAP_READSEARCH", PyLong_FromLong(PARSEC_CAP_READSEARCH));
+  PyDict_SetItemString(d, "PCAP_CAP",        PyLong_FromLong(PARSEC_CAP_CAP));
+  PyDict_SetItemString(d, "PCAP_MAC_SOCK",   PyLong_FromLong(PARSEC_CAP_MAC_SOCK));
 
   return m; /* m might be NULL if module init failed */
 }
