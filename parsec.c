@@ -199,7 +199,7 @@ static PyObject* py_drop_caps(PyObject *self)
 }
 
 /*
- * Считывание привилегий процессаю
+ * Считывание привилегий процесса.
  * Возвращает кортеж (effective, permitted, inheritable).
  */
 static PyObject* py_capget(PyObject *self, PyObject *args)
@@ -280,7 +280,7 @@ static PyMethodDef methods[] = {
   {"capset",        (PyCFunction) py_capset, METH_VARARGS,
    "Установка привилегий PARSEC процесса."},
   {"set_keepcups",  (PyCFunction) py_set_keepcaps, METH_VARARGS,
-   "Установка флага KEEPCUPS процесса."},
+   "Установка флага KEEPCAPS процесса."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
