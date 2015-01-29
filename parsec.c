@@ -21,6 +21,7 @@
 #include <parsec/parsec_cap.h>
 #include <parsec/mac.h>
 #include <parsec/parsec_integration.h>
+#include <sys/prctl.h>
 
 #if PY_MAJOR_VERSION < 3
     #define PyLong_FromLong PyInt_FromLong
@@ -235,6 +236,30 @@ static PyObject* py_capset(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+/*
+ * Установка флага KEEPCAPS на процесс.
+ * Параметры: True или False
+ */
+static PyObject* py_set_keepcaps(PyObject *self, PyObject *args)
+{
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args, "O:set_keepcaps", &obj))
+      return NULL;
+
+  int val = PyObject_IsTrue(obj);
+
+  if(val == -1)
+  {
+    PyErr_SetString(PyExc_TypeError, "Can't convert to True or False");
+    return NULL;
+  }
+
+  if(prctl(PR_SET_KEEPCAPS, val) == -1)
+      return raise_exception();
+
+  Py_RETURN_NONE;
+}
+
 static PyMethodDef methods[] = {
   {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
    "Преобразование объекта-метки в текстовый формат."},
@@ -254,6 +279,8 @@ static PyMethodDef methods[] = {
    "Считывание привилегий PARSEC процесса."},
   {"capset",        (PyCFunction) py_capset, METH_VARARGS,
    "Установка привилегий PARSEC процесса."},
+  {"set_keepcups",  (PyCFunction) py_set_keepcaps, METH_VARARGS,
+   "Установка флага KEEPCUPS процесса."},
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
