@@ -160,7 +160,19 @@ static PyObject* py_mac_set_pid(PyObject *self, PyObject *args)
 
   Py_RETURN_NONE;
 }
+static PyObject* py_mac_set_fd(PyObject *self, PyObject *args)
+{
+  mac_t mac = NULL;
+  int fd = 0;
 
+  if (!PyArg_ParseTuple(args, "iO&:mac_set_fd", &fd, get_mac, &mac))
+      return NULL;
+
+  if (mac_set_fd(fd, mac) == -1)
+      return raise_exception();
+
+  Py_RETURN_NONE;
+}
 static PyObject* py_mac_cmp(PyObject *self, PyObject *args)
 {
   mac_t src = NULL,
@@ -184,6 +196,21 @@ static PyObject* py_mac_get_fd(PyObject *self, PyObject *args)
       return NULL;
 
   mac = mac_get_fd(fd);
+  if (!mac)
+      return raise_exception();
+
+  return mac_to_py(mac);
+}
+
+static PyObject* py_mac_get_file(PyObject *self, PyObject *args)
+{
+  mac_t mac;
+  char *path;
+
+  if (!PyArg_ParseTuple(args, "s:mac_get_file", &path))
+      return NULL;
+
+  mac = mac_get_file(path);
   if (!mac)
       return raise_exception();
 
@@ -267,8 +294,12 @@ static PyMethodDef methods[] = {
    "Преобразование текста в мандатную метку."},
   {"mac_get_pid",   (PyCFunction) py_mac_get_pid, METH_VARARGS,
    "Считывание мандатного контекста безопасности процесса."},
+  {"mac_get_file",   (PyCFunction) py_mac_get_file, METH_VARARGS,
+   "Считывание мандатного контекста безопасности файла."},
   {"mac_set_pid",   (PyCFunction) py_mac_set_pid, METH_VARARGS,
    "Установка мандатного контекста безопасности процесса."},
+  {"mac_set_fd",   (PyCFunction) py_mac_set_fd, METH_VARARGS,
+   "Установка мандатного контекста безопасности дескриптора."},
   {"mac_cmp",       (PyCFunction) py_mac_cmp, METH_VARARGS,
    "Сравнение мандатных меток."},
   {"mac_get_fd",    (PyCFunction) py_mac_get_fd, METH_VARARGS,
