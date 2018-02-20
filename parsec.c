@@ -201,25 +201,7 @@ static PyObject* py_mac_get_fd(PyObject *self, PyObject *args)
 
   return mac_to_py(mac);
 }
-static PyObject* py_mac_set_pid_byfd(PyObject *self, PyObject *args)
-{
-  parsec_mac_label_t mac_label;
-  int fd = 0;
-  pid_t pid = 0;
 
-  if (!PyArg_ParseTuple(args, "ii:mac_set_pid_byfd", &pid, &fd))
-      return NULL;
-
-  if(parsec_fstatmac(fd,&mac_label) == -1)
-    return raise_exception();
-
-  if(parsec_setmac(pid,&mac_label.mac) == -1)
-    return raise_exception();
-  
-  
-  Py_RETURN_NONE;
-
-}
 static PyObject* py_mac_get_file(PyObject *self, PyObject *args)
 {
   mac_t mac;
@@ -331,13 +313,13 @@ static PyMethodDef methods[] = {
   {"mac_get_pid",   (PyCFunction) py_mac_get_pid, METH_VARARGS,
    "Считывание мандатного контекста безопасности процесса."},
   {"mac_get_file",   (PyCFunction) py_mac_get_file, METH_VARARGS,
-   "Считывание мандатного контекста безопасности процесса."},
+   "Считывание мандатного контекста безопасности файла."},
   {"mac_set_pid",   (PyCFunction) py_mac_set_pid, METH_VARARGS,
    "Установка мандатного контекста безопасности процесса."},
   {"mac_set_pid_byfd",   (PyCFunction) py_mac_set_pid_byfd, METH_VARARGS,
    "Установка мандатного контекста безопасности процесса по метке дескриптора или сокета."},
   {"mac_set_fd",   (PyCFunction) py_mac_set_fd, METH_VARARGS,
-   "Установка мандатного контекста безопасности процесса."},
+   "Установка мандатного контекста безопасности дескриптора."},
   {"mac_cmp",       (PyCFunction) py_mac_cmp, METH_VARARGS,
    "Сравнение мандатных меток."},
   {"mac_get_fd",    (PyCFunction) py_mac_get_fd, METH_VARARGS,
