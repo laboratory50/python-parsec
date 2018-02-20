@@ -286,7 +286,25 @@ static PyObject* py_set_keepcaps(PyObject *self, PyObject *args)
 
   Py_RETURN_NONE;
 }
+static PyObject* py_mac_set_pid_byfd(PyObject *self, PyObject *args)
+{
+  parsec_mac_label_t mac_label;
+  int fd = 0;
+  pid_t pid = 0;
 
+  if (!PyArg_ParseTuple(args, "ii:mac_set_pid_byfd", &pid, &fd))
+      return NULL;
+
+  if(parsec_fstatmac(fd,&mac_label) == -1)
+    return raise_exception();
+
+  if(parsec_setmac(pid,&mac_label.mac) == -1)
+    return raise_exception();
+
+
+  Py_RETURN_NONE;
+
+}
 static PyMethodDef methods[] = {
   {"mac_to_text",   (PyCFunction) py_mac_to_text, METH_VARARGS,
    "Преобразование объекта-метки в текстовый формат."},
@@ -298,6 +316,8 @@ static PyMethodDef methods[] = {
    "Считывание мандатного контекста безопасности файла."},
   {"mac_set_pid",   (PyCFunction) py_mac_set_pid, METH_VARARGS,
    "Установка мандатного контекста безопасности процесса."},
+  {"mac_set_pid_byfd",   (PyCFunction) py_mac_set_pid_byfd, METH_VARARGS,
+   "Установка мандатного контекста безопасности процесса по метке дескриптора или сокета."},
   {"mac_set_fd",   (PyCFunction) py_mac_set_fd, METH_VARARGS,
    "Установка мандатного контекста безопасности дескриптора."},
   {"mac_cmp",       (PyCFunction) py_mac_cmp, METH_VARARGS,
